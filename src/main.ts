@@ -1,6 +1,6 @@
-import { CompanionVariableDefinition, InstanceBase, Regex, runEntrypoint, InstanceStatus, SomeCompanionConfigField } from '@companion-module/base';
+import { CompanionVariableDefinition, InstanceBase, runEntrypoint, InstanceStatus, SomeCompanionConfigField } from '@companion-module/base';
 import { updateActions } from './actions';
-import { Config } from './config';
+import { Config, getConfigFields } from './config';
 import { P2CameraState, P2CameraConnection, P2OpticalState } from 'p2-camera-connection';
 import { initCameraVariables, initOpticalVariables, updateCameraVariables, updateOpticalVariables } from './variables';
 
@@ -101,41 +101,7 @@ export class ModuleInstance extends InstanceBase<Config> {
 
     // Return config fields for web config
     getConfigFields(): SomeCompanionConfigField[] {
-        return [
-            {
-                type: 'textinput',
-                id: 'host',
-                label: 'Target IP',
-                width: 8,
-                regex: Regex.IP,
-            },
-            {
-                type: 'textinput',
-                id: 'port',
-                label: 'P2 TCP Port',
-                width: 4,
-                regex: Regex.PORT,
-            },
-            {
-                type: 'textinput',
-                id: 'username',
-                label: 'Username',
-                width: 4,
-            },
-            {
-                type: 'textinput',
-                id: 'password',
-                label: 'Password',
-                width: 4,
-            },
-            {
-                type: 'textinput',
-                id: 'irisSteps',
-                label: 'Iris Steps',
-                width: 4,
-                default: '2.8:2970;3:3150;3.2:3350;3.4:3550;3.6:3700;3.8:3850;4:4000;4.2:4150;4.5:4350;4.8:4550;5:4650;5.3:4800;5.6:5000;6:5150;6.4:5350;6.8:5550;7.2:5700;7.6:5850;8:6000;8.5:6200;9:6450;9,6:6550;10:6650;11:6900;CLOSE:8174'
-            },
-        ]
+        return getConfigFields();
     }
 
     getConfig() {

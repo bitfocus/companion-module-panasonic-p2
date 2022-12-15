@@ -12,4 +12,4 @@ Companion Module to control Panasonic Cameras supporting the P2 Protocol. Tested
 ### Camera Configuration
 
 To connect to a Camera, it must be on the same network as companion and "IP Remote" has to be enabled.
-Due to the way the API works, every camera must have a different Port to work with this Companion module.
+Due to the way the P2 Protocol works, every camera must have a different Port to work with this Companion module.
