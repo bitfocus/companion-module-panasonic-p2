@@ -12,7 +12,7 @@
 		"url": "git+https://github.com/bitfocus/companion-module-panasonic-p2.git"
 	},
 	"dependencies": {
-		"@companion-module/base": "~1.0.0",
+		"@companion-module/base": "~1.0.2",
 		"p2-camera-connection": "^1.0.1"
 	},
 	"devDependencies": {
