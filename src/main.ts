@@ -16,7 +16,6 @@ export class ModuleInstance extends InstanceBase<Config> {
 
     async init(config: Config) {
         this.config = config;
-
         this.updateStatus(InstanceStatus.Disconnected);
         this.updateActions();
         this.connect();
@@ -38,12 +37,16 @@ export class ModuleInstance extends InstanceBase<Config> {
     }
 
     private connect() {
-        if (!this.config?.host || !this.config.port || !this.config.username || !this.config.password) {
+        if (!this.config?.host || !this.config.port) {
             this.updateStatus(InstanceStatus.BadConfig);
             return;
         }
+        
+        this.config.username = this.config?.username ?? '';
+        this.config.password = this.config?.password ?? '';
 
-        this.p2Connection = new P2CameraConnection(this.config.host, this.config.port, this.config.username, this.config.password);
+        const udpSocket = this.createSharedUdpSocket("udp4");
+        this.p2Connection = new P2CameraConnection(this.config.host, this.config.port, this.config.username, this.config.password, 500, udpSocket);
         
         this.p2Connection.on('connecting', () => {
             this.updateStatus(InstanceStatus.Connecting);
@@ -51,14 +54,14 @@ export class ModuleInstance extends InstanceBase<Config> {
 
         this.p2Connection.on('connected', () => {
             this.updateStatus(InstanceStatus.Ok);
-        });
+        }); 
 
         this.p2Connection.on('disconnected', () => {
             this.updateStatus(InstanceStatus.Disconnected);
         });
 
         this.p2Connection.on('debug', (message) => {
-            this.log('debug', message);
+            this.log('debug', message); 
         });
 
         this.p2Connection.on('log', (message) => {
@@ -91,9 +94,9 @@ export class ModuleInstance extends InstanceBase<Config> {
     }
 
     onCameraState(state: P2CameraState) {
-        if (!this.cameraVariablesInitialized) {
+        if (!this.cameraVariablesInitialized) { 
             initCameraVariables(this, state);
-            this.cameraVariablesInitialized = true;
+            this.cameraVariablesInitialized = true; 
         }
 
         updateCameraVariables(this, state);

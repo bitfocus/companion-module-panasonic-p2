@@ -1,6 +1,6 @@
 {
 	"name": "panasonic-p2",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"main": "dist/main.js",
 	"scripts": {
 		"build": "tsc",
@@ -12,8 +12,8 @@
 		"url": "git+https://github.com/bitfocus/companion-module-panasonic-p2.git"
 	},
 	"dependencies": {
-		"@companion-module/base": "~1.0.2",
-		"p2-camera-connection": "^1.0.1"
+		"@companion-module/base": "~1.8.0",
+		"p2-camera-connection": "file:../../p2-camera-connection"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^0.5.1",

@@ -154,15 +154,12 @@ export function updateActions(instance: ModuleInstance) {
                 }
             ],
             callback: async (event) => {
-                const direction = event.options.direction;
-                if (typeof direction !== 'number') return;
-
-                const currentStep = getCurrentIrisStep(instance, irisSteps);
-                const index = irisSteps.findIndex(step => step === currentStep);
-                const nextIndex = Math.max(Math.min(index + direction, irisSteps.length-1), 0);
-                const nextStep = irisSteps[nextIndex];
-                instance.log('debug', JSON.stringify({index, nextIndex, nextStep, irisSteps}));
-                instance.p2Connection?.camCtl.setIris(nextStep.value);
+                const value = event.options.value;
+                if (typeof value !== 'number') return;
+                let iris = instance.p2Connection?.getCameraState()?.iris;
+                if (!iris) return; 
+                iris = Math.max(Math.max(0, (iris + value)), irisSteps[0].value);
+                instance.p2Connection?.camCtl.setIris(iris);
             },
         },
 
@@ -233,6 +230,12 @@ export function updateActions(instance: ModuleInstance) {
                     default: 'R'
                 },
                 {
+                    type: "checkbox",
+                    id: "useAbsolute",
+                    label: "Send absolute instead of relative values",
+                    default: false
+                },
+                {
                     id: 'value',
                     type: 'number',
                     label: 'Relative Value',
@@ -246,7 +249,15 @@ export function updateActions(instance: ModuleInstance) {
                 if (color !== 'R' && color !== 'B') return;
                 const value = event.options.value;
                 if (typeof value !== 'number') return;
+                if (event.options.useAbsolute) {
+                    const gain = ((color == 'R' ?
+                        instance.p2Connection?.getCameraState()?.redGain
+                        : instance.p2Connection?.getCameraState()?.blueGain
+                        ) ?? 0) + value;
+                    instance.p2Connection?.camCtl.setGain(color, gain);
+                } else {
                 instance.p2Connection?.camCtl.changeGain(color, value);
+                }
             },
         },
 
