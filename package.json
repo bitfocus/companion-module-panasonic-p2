@@ -16,7 +16,7 @@
 		"p2-camera-connection": "^1.0.1"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^0.5.1",
+		"@companion-module/tools": "^1.5.2",
 		"typescript": "^4.9.4"
 	},
 	"prettier": "@companion-module/tools/.prettierrc.json"
